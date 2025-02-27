@@ -139,3 +139,59 @@ def signin():
 def logout():
     flask_login.logout_user()
     return  redirect('/')
+
+@app.route("/settings", methods=["GET", "POST"])
+@flask_login.login_required
+def settings():
+    if request.method == "POST":
+        new_username = request.form.get("username")
+        new_email = request.form.get("email")
+        current_password = request.form.get("current_password")
+        new_password = request.form.get("new_password")
+        confirm_new_password = request.form.get("confirm_new_password")
+
+        conn = connect_db()
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT * FROM `Customer` WHERE `id` = {flask_login.current_user.id};")
+        user_data = cursor.fetchone()
+
+        if current_password != user_data["password"]:
+            flash("Current password is incorrect.")
+            return redirect("/settings")
+
+        if new_password and new_password != confirm_new_password:
+            flash("New passwords do not match.")
+            return redirect("/settings")
+
+        try:
+            if new_username:
+                cursor.execute(f"""
+                    UPDATE `Customer`
+                    SET `username` = '{new_username}'
+                    WHERE `id` = {flask_login.current_user.id};
+                """)
+
+            if new_email:
+                cursor.execute(f"""
+                    UPDATE `Customer`
+                    SET `email` = '{new_email}'
+                    WHERE `id` = {flask_login.current_user.id};
+                """)
+
+            if new_password:
+                cursor.execute(f"""
+                    UPDATE `Customer`
+                    SET `password` = '{new_password}'
+                    WHERE `id` = {flask_login.current_user.id};
+                """)
+
+            flash("Your settings have been updated successfully.")
+        except pymysql.err.IntegrityError:
+            flash("Sorry, that username or email is already in use.")
+        finally:
+            cursor.close()
+            conn.close()
+
+        return redirect("/settings")
+
+    return render_template("accountpage.html.jinja", user=flask_login.current_user)
