@@ -126,7 +126,7 @@ def signin():
         elif password != result["password"]:
             flash("username or password is incorrect")
         else:
-            user = User(result["id"], result["username"], result["email"], result["first_name"], result["last_name"])
+            user = User(result["id"], result["username"], result["email"])
 
             flask_login.login_user(user)
             
@@ -134,3 +134,8 @@ def signin():
 
 
     return render_template("signin.html.jinja")
+
+@app.route('/logout')
+def logout():
+    flask_login.logout_user()
+    return  redirect('/')
