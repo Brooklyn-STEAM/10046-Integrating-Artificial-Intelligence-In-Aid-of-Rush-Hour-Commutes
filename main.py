@@ -195,3 +195,4 @@ def settings():
         return redirect("/settings")
 
     return render_template("accountpage.html.jinja", user=flask_login.current_user)
+
