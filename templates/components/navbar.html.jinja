@@ -47,7 +47,7 @@
     .right-navbar .dropdown-menu {
       background-color: #343a40; 
       border: none; 
-      display: none; /* Hide dropdown by default */
+      display: none; 
     }
 
     .right-navbar .dropdown-item {
@@ -58,9 +58,8 @@
       background-color: #495057; 
     }
 
-    /* CSS-only dropdown */
     .right-navbar .dropdown:hover .dropdown-menu {
-      display: block; /* Show dropdown on hover */
+      display: block;
     }
 
     .settings-button {
@@ -92,9 +91,6 @@
               <a class="nav-link" aria-current="page" href="/settings">Welcome {{ current_user.username }}</a>
             </li>
           {% else %}
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="/signup">Sign Up</a>
-            </li>
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="/signin">Sign In</a>
             </li>
