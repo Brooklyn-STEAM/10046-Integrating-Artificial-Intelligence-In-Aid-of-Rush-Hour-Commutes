@@ -20,7 +20,7 @@ def connect_db():
     conn = pymysql.connect(
         host = "db.steamcenter.tech",
         database = "clear_path",
-        user = "nshovo",
+        user = "ajohn",
         password = conf.password,
         autocommit = True,
         cursorclass= pymysql.cursors.DictCursor
@@ -195,4 +195,5 @@ def settings():
         return redirect("/settings")
 
     return render_template("accountpage.html.jinja", user=flask_login.current_user)
+
 
