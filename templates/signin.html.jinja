@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign in</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+
     <style>
         body {
-            background: linear-gradient(120deg, #f2f2f2, #f1f1f1);
+            background: linear-gradient(200deg, #BCB8A6, #F2F0E6);
             min-height: 100vh;
             margin: 0;
             display: flex;
@@ -46,7 +49,7 @@
         #showPasswordBtn {
             position: absolute;
             right: 10px;
-            background: none;
+            background: white;
             border: none;
             cursor: pointer;
             display: flex;
@@ -56,8 +59,8 @@
         }
 
         #showPasswordBtn i {
-            font-size: 1.2em;
-            color: #666;
+            font-size: 1.4em;
+            color: #075299;
         }
     </style>
 </head>
@@ -90,7 +93,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100">Sign in</button>
+                <button type="submit" class="btn btn-dark w-100">Sign in</button>
             </form>
 
             <div class="create-account-link">
