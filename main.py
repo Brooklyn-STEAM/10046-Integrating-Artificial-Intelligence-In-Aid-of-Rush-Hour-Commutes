@@ -122,9 +122,9 @@ def signin():
         result = cursor.fetchone()
 
         if result is None: 
-            flash("username or password is incorrect")
+            flash("Username or Password is incorrect")
         elif password != result["password"]:
-            flash("username or password is incorrect")
+            flash("Username or Password is incorrect")
         else:
             user = User(result["id"], result["username"], result["email"])
 
@@ -139,6 +139,11 @@ def signin():
 def logout():
     flask_login.logout_user()
     return  redirect('/')
+
+@app.route('/delete')
+def deleteaccount():
+    flask_login.logout_user()
+    return redirect('/')
 
 @app.route("/settings", methods=["GET", "POST"])
 @flask_login.login_required
@@ -197,3 +202,14 @@ def settings():
     return render_template("accountpage.html.jinja", user=flask_login.current_user)
 
 
+@app.route('/contactus')
+def contactus():
+    return render_template('contactus.html.jinja')
+
+@app.route('/clearpath', methods=["GET", "POST"])
+def clearpath():
+    return render_template('clearpath.html.jinja')
+
+@app.route('/thank-you')
+def thank_you():
+    return render_template('thank_you.html.jinja')

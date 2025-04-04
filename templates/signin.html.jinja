@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign in</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
 
     <style>
         body {
@@ -17,9 +15,9 @@
             flex-direction: column;
         }
         .card {
-            border: 2px solid #000000;
+            border: 5px solid #000000;
             border-radius: 10px;    
-            padding: 40px;
+            padding: 50px;
             width: 500px;
             position: relative; 
         }
@@ -59,13 +57,14 @@
         }
 
         #showPasswordBtn i {
-            font-size: 1.4em;
+            font-size: em;
             color: #075299;
         }
     </style>
 </head>
 <body>
-    {% include "components/navbar.html.jinja" %}
+
+    {% include "components/navbar2.html.jinja" %}
 
         <div class="d-flex align-items-center justify-content-center vh-100">
             <div class="card p-4 shadow bg-white" style="max-width: 400px;">
@@ -97,7 +96,7 @@
             </form>
 
             <div class="create-account-link">
-                <a href="/signup">Create an account</a>
+                <a href="/signup">Create a ClearPath Account!</a>
             </div>
         </div>
     </div>
