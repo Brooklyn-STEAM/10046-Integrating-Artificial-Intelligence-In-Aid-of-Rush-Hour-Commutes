@@ -110,15 +110,12 @@
 
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
-        eyeIcon.setAttribute('data-lucide', 'eye-off'); 
+        eyeIcon.setAttribute('data-lucide="eye-off"'); 
     } else {
         passwordInput.type = 'password'; 
-        eyeIcon.setAttribute('data-lucide', 'eye'); 
+        eyeIcon.setAttribute('data-lucide="eye"'); 
     }
 
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-    }
 }
 </script>
 

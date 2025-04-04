@@ -1,8 +1,11 @@
-from flask import Flask, render_template, request, redirect, flash, abort
+from flask import Flask, render_template, request, redirect, flash, abort, session, url_for
 import flask_login
 import pymysql
 from dynaconf import Dynaconf
-from datetime import datetime
+from datetime import datetime, timedelta
+from functools import wraps
+import random
+import string
 
 app = Flask(__name__)
 
@@ -118,20 +121,23 @@ def signin():
         cursor = conn.cursor()
 
         cursor.execute(f"SELECT * FROM `Customer` WHERE `username` = '{username}';")
-
         result = cursor.fetchone()
 
-        if result is None: 
-            flash("Username or Password is incorrect")
-        elif password != result["password"]:
-            flash("Username or Password is incorrect")
+        if result is None or password != result["password"]:
+            flash("Username or password is incorrect")
         else:
             user = User(result["id"], result["username"], result["email"])
 
-            flask_login.login_user(user)
-            
-            return redirect('/')
+            cursor.execute(f"SELECT * FROM `Admin` WHERE `id` = {result['id']};")
+            admin_data = cursor.fetchone()
 
+            if admin_data:
+                session['is_admin'] = True  
+            else:
+                session['is_admin'] = False
+
+            flask_login.login_user(user)
+            return redirect('/')
 
     return render_template("signin.html.jinja")
 
@@ -202,14 +208,65 @@ def settings():
     return render_template("accountpage.html.jinja", user=flask_login.current_user)
 
 
-@app.route('/contactus')
-def contactus():
-    return render_template('contactus.html.jinja')
 
-@app.route('/clearpath', methods=["GET", "POST"])
-def clearpath():
-    return render_template('clearpath.html.jinja')
+@app.route("/admin")
+@flask_login.login_required
+def admin():
+    conn = connect_db()
+    cursor = conn.cursor()
 
-@app.route('/thank-you')
-def thank_you():
-    return render_template('thank_you.html.jinja')
+    cursor.execute(f"""
+        SELECT * FROM `Admin` 
+        WHERE `id` = {flask_login.current_user.id};
+    """)
+    admin_data = cursor.fetchone()
+
+    if not admin_data:
+        abort(403)  
+
+    cursor.execute("SELECT first_name, last_name, state, issue FROM `Contactus`;")
+    contactus_data = cursor.fetchall()
+
+    cursor.execute("""
+        SELECT username, email, time_stamp 
+        FROM `Customer` 
+        WHERE id NOT IN (SELECT id FROM `Admin`);
+    """)
+    customer_data = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        "admin.html.jinja", 
+        Contactus_data=contactus_data, 
+        customer_data=customer_data
+    )
+
+@app.route("/admin/signin", methods=["GET", "POST"])
+def admin_signin():
+    if request.method == "POST":
+        username = request.form['username'].strip()
+        password = request.form['password']
+
+        conn = connect_db()
+        cursor = conn.cursor()
+
+
+        cursor.execute(f"""
+            SELECT * FROM `Admin` 
+            WHERE `username` = '{username}' AND `password` = '{password}';
+        """)
+        admin_data = cursor.fetchone()
+
+        if admin_data:
+
+            user = User(admin_data["id"], admin_data["username"], admin_data["email"])
+            flask_login.login_user(user)
+            session['is_admin'] = True
+            return redirect("/admin")
+        else:
+            flash("Invalid admin credentials")
+
+    return render_template("admin_signin.html.jinja")
+
