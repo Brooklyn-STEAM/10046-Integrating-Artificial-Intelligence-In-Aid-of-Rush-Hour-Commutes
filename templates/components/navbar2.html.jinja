@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    .navbar {
+        background: linear-gradient(90deg, #BCB8A6, #00c6ff);
+    }
+
+  .navbar-nav .nav-item {
+    margin-right: 20px;
+  }
+
+  .navbar-nav .nav-item:last-child {
+    margin-right: 0; 
+  }
+
+  .navbar {
+    padding-left: 10px; 
+    padding-right: 15px; 
+  }
+
+  .profile-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+    .profile-icon {
+        width: 50px;  
+        height: 50px; 
+        border-radius: 30%;  
+        margin-right: 5px; 
+        object-fit: cover; 
+     }
+</style>
+
+    
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#"><img src="static/OfficialLogo.png" alt="Logo" width="55px" height="50px"></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">Path Maps</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/settings">Account Settings</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/contactus">Contact Us</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="/clearpath">Welcome to ClearPath</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+            {% if current_user.is_authenticated %}
+              <div class="profile-container">
+                <img src="static/profileicon.png" alt="Profile Icon" class="profile-icon"><a class="nav-link" aria-current="page" href="/settings">Welcome {{ current_user.username }}</a>
+              </div>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="/signin">Sign In</a>
+              </li>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+</body>

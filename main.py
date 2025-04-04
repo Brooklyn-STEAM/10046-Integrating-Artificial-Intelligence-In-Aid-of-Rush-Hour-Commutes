@@ -146,6 +146,11 @@ def logout():
     flask_login.logout_user()
     return  redirect('/')
 
+@app.route('/delete')
+def deleteaccount():
+    flask_login.logout_user()
+    return redirect('/')
+
 @app.route("/settings", methods=["GET", "POST"])
 @flask_login.login_required
 def settings():
