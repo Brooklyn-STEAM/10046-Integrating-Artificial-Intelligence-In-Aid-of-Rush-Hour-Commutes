@@ -35,22 +35,22 @@
             color:darkorchid
         }
 
-         #showPasswordBtn {
-            position:absolute;
-            right: 20px;
-            background: white;
+         .show-password-btn {
+            position: absolute;
+            right: 10px;
+            top: 38px;
+            background: transparent;
             border: none;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 3;
+            padding: 0;
+            z-index: 2;
         }
 
-        #showPasswordBtn i {
+        .show-password-btn i {
             font-size: 1.5em;
             color: #075299;
         }
+
     </style>
 </head>
 <body>
@@ -78,16 +78,19 @@
                     <input type="text" class="form-control" name="username" id="username" placeholder="Enter a Username" required>
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3 position-relative">
                     <label for="password" class="form-label">Password</label>
                     <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required>
+                    <button type="button" class="show-password-btn" onclick="togglePassword('password', this)" aria-label="Toggle password visibility">
+                        <i data-lucide="eye"></i>
+                    </button>
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3 position-relative">
                     <label for="confirm-password" class="form-label">Confirm Password</label>
-                    <input type="password" class="form-control" name="confirm-password" id="confirm-password" placeholder="Confirm Password" required>
-                    <button type="button" id="showPasswordBtn" onclick="togglePassword()" aria-label="Toggle password visibility">
-                    <i data-lucide="eye"></i>
+                    <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm your password" required>
+                    <button type="button" class="show-password-btn" onclick="togglePassword('confirm_password', this)" aria-label="Toggle password visibility">
+                        <i data-lucide="eye"></i>
                     </button>
                 </div>
 
@@ -100,24 +103,22 @@
     </div>
 
 <script>
-    function togglePassword() {
-    const passwordInput = document.getElementById('confirm-password');
-    const eyeIcon = document.querySelector('#showPasswordBtn i');
+    function togglePassword(inputId, btn) {
+    const passwordInput = document.getElementById(inputId);
+    const icon = btn.querySelector('i');
 
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
-        eyeIcon.setAttribute('data-lucide', 'eye-off'); 
+        icon.setAttribute('data-lucide', 'eye-off');
     } else {
-        passwordInput.type = 'password'; 
-        eyeIcon.setAttribute('data-lucide', 'eye'); 
+        passwordInput.type = 'password';
+        icon.setAttribute('data-lucide', 'eye');
     }
 
     if (typeof lucide !== 'undefined') {
         lucide.createIcons();
     }
-} 
-            
- 
+}
 </script>
 
 <script src="https://unpkg.com/lucide@latest"></script>
