@@ -22,7 +22,8 @@
 
     .right-navbar:hover {
       width: 250px; 
-      opacity: 1; 
+      opacity: 1;
+      overflow-y: auto;
     }
 
     .right-navbar .navbar-brand {
@@ -46,13 +47,13 @@
     }
 
     .right-navbar .dropdown-menu {
-      background-color: #343a40; 
+      background-color: #ffffff; 
       border: none; 
       display: none; 
     }
 
     .right-navbar .dropdown-item {
-      color: white; 
+      color: rgb(0, 0, 0); 
     }
 
     .right-navbar .dropdown-item:hover {
@@ -107,29 +108,74 @@
              <a class="nav-link" href="/contactus">Contact Us</a>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="favoritesDropdown" role="button">
+              <a class="nav-link dropdown-toggle" href="#" id="favoritesDropdown" role="button" data-bs-toggle="dropdown">
                 Favorites
               </a>
               <ul class="dropdown-menu" aria-labelledby="favoritesDropdown">
-                <li><a class="dropdown-item" href="#">Work</a></li>
-                <li><a class="dropdown-item" href="#">School</a></li>
-                <li><a class="dropdown-item" href="#">Home</a></li>
-                <li><a class="dropdown-item" href="#">Saved</a></li>
+                <!-- HOME -->
+                <li>
+                  <a class="dropdown-item" data-bs-toggle="collapse" href="#homeForm" role="button" aria-expanded="false">Home</a>
+                  <div class="collapse px-3" id="homeForm">
+                    <form method="POST" action="/favorites/save">
+                      <input type="hidden" name="category" value="Home">
+                      <input class="form-control my-1" name="address" placeholder="Address" required>
+                      <input class="form-control my-1" name="city" placeholder="City" required>
+                      <input class="form-control my-1" name="state" placeholder="State" required>
+                      <input class="form-control my-1" name="zip" placeholder="ZIP Code" required>
+                      <input class="form-control my-1" name="country" placeholder="Country" required>
+                      <button class="btn btn-sm btn-light my-2" type="submit">Save</button>
+                    </form>
+                  </div>
+                </li>
+                <!-- WORK -->
+                <li>
+                  <a class="dropdown-item" data-bs-toggle="collapse" href="#workForm" role="button" aria-expanded="false">Work</a>
+                  <div class="collapse px-3" id="workForm">
+                    <form method="POST" action="/favorites/save">
+                      <input type="hidden" name="category" value="Work">
+                      <input class="form-control my-1" name="address" placeholder="Address" required>
+                      <input class="form-control my-1" name="city" placeholder="City" required>
+                      <input class="form-control my-1" name="state" placeholder="State" required>
+                      <input class="form-control my-1" name="zip" placeholder="ZIP Code" required>
+                      <input class="form-control my-1" name="country" placeholder="Country" required>
+                      <button class="btn btn-sm btn-light my-2" type="submit">Save</button>
+                    </form>
+                  </div>
+                </li>
+                <!-- SCHOOL -->
+                <li>
+                  <a class="dropdown-item" data-bs-toggle="collapse" href="#schoolForm" role="button" aria-expanded="false">School</a>
+                  <div class="collapse px-3" id="schoolForm">
+                    <form method="POST" action="/favorites/save">
+                      <input type="hidden" name="category" value="School">
+                      <input class="form-control my-1" name="address" placeholder="Address" required>
+                      <input class="form-control my-1" name="city" placeholder="City" required>
+                      <input class="form-control my-1" name="state" placeholder="State" required>
+                      <input class="form-control my-1" name="zip" placeholder="ZIP Code" required>
+                      <input class="form-control my-1" name="country" placeholder="Country" required>
+                      <button class="btn btn-sm btn-light my-2" type="submit">Save</button>
+                    </form>
+                  </div>
+                </li>
+                <!-- SAVED -->
+                <li>
+                  <a class="dropdown-item" data-bs-toggle="collapse" href="#savedForm" role="button" aria-expanded="false">Saved</a>
+                  <div class="collapse px-3" id="savedForm">
+                    <form method="POST" action="/favorites/save">
+                      <input type="hidden" name="category" value="Saved">
+                      <input class="form-control my-1" name="address" placeholder="Address" required>
+                      <input class="form-control my-1" name="city" placeholder="City" required>
+                      <input class="form-control my-1" name="state" placeholder="State" required>
+                      <input class="form-control my-1" name="zip" placeholder="ZIP Code" required>
+                      <input class="form-control my-1" name="country" placeholder="Country" required>
+                      <button class="btn btn-sm btn-light my-2" type="submit">Save</button>
+                    </form>
+                  </div>
+                </li>
               </ul>
             </li>
           </ul>
         </div>
-        <div class="settings-button">
-          {% if current_user.is_authenticated %}
-            <a href="/settings">
-              <i class="fas fa-cog"></i> Settings
-            </a>
-          {% else %}
-            <a href="/signup">
-              <i class="fas fa-cog"></i> Settings
-            </a>
-          {% endif %}
-      </div>
     </div>
   </nav>
 </body>

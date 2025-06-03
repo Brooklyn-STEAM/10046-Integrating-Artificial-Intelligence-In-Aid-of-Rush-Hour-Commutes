@@ -35,7 +35,7 @@
 </head>
 <body>
 
-    <div class="admin-icon">⚙️ Admin</div>
+    <a href="/" class="admin-icon">Logout</a>
 
     <h2 style="text-align: center;">Admin Dashboard</h2>
 
@@ -67,7 +67,7 @@
             <tr>
                 <th>Username</th>
                 <th>Email</th>
-                <th>Timestamp</th>
+                <th>Account Creation</th>
             </tr>
         </thead>
         <tbody>
@@ -75,7 +75,7 @@
             <tr>
                 <td>{{ row.username }}</td>
                 <td>{{ row.email }}</td>
-                <td>{{ row.timestamp }}</td>
+                <td>{{ row.time_stamp }}</td>
             </tr>
             {% endfor %}
         </tbody>

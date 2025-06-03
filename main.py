@@ -23,7 +23,7 @@ def connect_db():
     conn = pymysql.connect(
         host = "db.steamcenter.tech",
         database = "clear_path",
-        user = "ajohn",
+        user = "nshovo",
         password = conf.password,
         autocommit = True,
         cursorclass= pymysql.cursors.DictCursor
@@ -146,6 +146,18 @@ def logout():
     flask_login.logout_user()
     return  redirect('/')
 
+@app.route('/contactus')
+def contactus():
+    return render_template('contactus.html.jinja')
+
+@app.route('/clearpath', methods=["GET", "POST"])
+def clearpath():
+    return render_template('clearpath.html.jinja')
+
+@app.route('/thank-you')
+def thank_you():
+    return render_template('thank_you.html.jinja')
+
 @app.route('/delete')
 def deleteaccount():
     flask_login.logout_user()
@@ -244,6 +256,7 @@ def admin():
     )
 
 @app.route("/admin/signin", methods=["GET", "POST"])
+@flask_login.login_required
 def admin_signin():
     if request.method == "POST":
         username = request.form['username'].strip()
@@ -270,3 +283,53 @@ def admin_signin():
 
     return render_template("admin_signin.html.jinja")
 
+
+@app.route('/favorites/save', methods=['POST'])
+@flask_login.login_required
+def save_favorite():
+    category = request.form.get('category')
+    address = request.form.get('address')
+    city = request.form.get('city')
+    state = request.form.get('state')
+    zipcode = request.form.get('zip')
+    country = request.form.get('country')
+    user_id = flask_login.current_user.id
+
+    valid_categories = {
+        'Home': 'homeaddress',
+        'Work': 'workaddress',
+        'School': 'schooladdress',
+        'Saved': 'savedaddress'
+    }
+
+    if category not in valid_categories:
+        flash("Invalid category.")
+        return redirect('/')
+
+    table = category
+    address_col = valid_categories[category]
+
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    cursor.execute(f"SELECT * FROM `{table}` WHERE id = %s", (user_id,))
+    existing = cursor.fetchone()
+
+    if existing:
+        cursor.execute(f"""
+            UPDATE `{table}`
+            SET {address_col}=%s, city=%s, state=%s, zipcode=%s, country=%s
+            WHERE id=%s
+        """, (address, city, state, zipcode, country, user_id))
+        flash(f"{category} address updated.")
+    else:
+        cursor.execute(f"""
+            INSERT INTO `{table}` (id, {address_col}, city, state, zipcode, country)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """, (user_id, address, city, state, zipcode, country))
+        flash(f"{category} address saved.")
+
+    cursor.close()
+    conn.close()
+
+    return redirect('/')
