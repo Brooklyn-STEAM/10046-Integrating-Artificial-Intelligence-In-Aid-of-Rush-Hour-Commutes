@@ -125,8 +125,18 @@ def signin():
 
         if result is None or password != result["password"]:
             flash("Username or password is incorrect")
+        if result is None or password != result["password"]:
+            flash("Username or password is incorrect")
         else:
             user = User(result["id"], result["username"], result["email"])
+
+            cursor.execute(f"SELECT * FROM `Admin` WHERE `id` = {result['id']};")
+            admin_data = cursor.fetchone()
+
+            if admin_data:
+                session['is_admin'] = True  
+            else:
+                session['is_admin'] = False
 
             cursor.execute(f"SELECT * FROM `Admin` WHERE `id` = {result['id']};")
             admin_data = cursor.fetchone()
@@ -220,6 +230,40 @@ def settings():
     return render_template("accountpage.html.jinja", user=flask_login.current_user)
 
 
+
+@app.route("/admin")
+@flask_login.login_required
+def admin():
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    cursor.execute(f"""
+        SELECT * FROM `Admin` 
+        WHERE `id` = {flask_login.current_user.id};
+    """)
+    admin_data = cursor.fetchone()
+
+    if not admin_data:
+        abort(403)  
+
+    cursor.execute("SELECT first_name, last_name, state, issue FROM `Contactus`;")
+    contactus_data = cursor.fetchall()
+
+    cursor.execute("""
+        SELECT username, email, time_stamp 
+        FROM `Customer` 
+        WHERE id NOT IN (SELECT id FROM `Admin`);
+    """)
+    customer_data = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        "admin.html.jinja", 
+        Contactus_data=contactus_data, 
+        customer_data=customer_data
+    )
 
 @app.route("/admin")
 @flask_login.login_required
